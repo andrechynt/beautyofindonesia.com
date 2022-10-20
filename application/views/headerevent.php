@@ -34,8 +34,8 @@ src="https://www.facebook.com/tr?id=1031554816897182&amp;ev=PageView&amp;noscrip
 </head><!--[if IE 7]><body class="ie7 lt-ie8 lt-ie9 lt-ie10"><![endif]--><!--[if IE 8]><body class="ie8 lt-ie9 lt-ie10"><![endif]--><!--[if IE 9]><body class="ie9 lt-ie10"><![endif]--><!--[if (gt IE 9)|!(IE)]><!-->
 <body><!--<![endif]-->
 <div id="page-wrap">
-	<div class="preloader">
-	</div>
+	<!-- <div class="preloader">
+	</div> -->
 	<header id="header-page">
 		<div class="header-page__inner">
 			<div class="container">

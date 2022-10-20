@@ -1642,4 +1642,6 @@ class Model extends CI_Model
 	public function iklan_artikel() {
 		return $this->db->get('iklan_artikel');
 	}
+
+	
 }

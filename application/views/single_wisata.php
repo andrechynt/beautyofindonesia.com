@@ -141,13 +141,15 @@
         width: 450px;
     }
 
-    .img-iklan-md, .img-iklan-lg {
+    .img-iklan-md,
+    .img-iklan-lg {
         object-fit: cover;
         background-position: center;
         overflow: hidden;
     }
 
-    .img-iklan-md img, .img-iklan-lg img {
+    .img-iklan-md img,
+    .img-iklan-lg img {
         width: 100%;
         height: 100%;
     }
@@ -229,6 +231,7 @@
                     <?php $tgl = date('Y-m-d'); ?>
                     <div class="post-body">
                         <div class="post-content">
+
                             <?php
                             if ($this->session->userdata('current_language') == 'english') {
                                 $deskripsi = @$wisata_en->wisata_deskripsi;
@@ -236,6 +239,100 @@
                                 $deskripsi = @$wisata->wisata_deskripsi;
                             }
                             ?>
+
+                            <?php
+                            foreach ($iklan_wisata as $i) {
+                                if ($i['wisata_id'] == $wisata->wisata_id) {
+                                    $imgSrc = null;
+                                    $url = null;
+                                    $iklanPosisi = $i['iklan_posisi'];
+
+                                    switch ($iklanPosisi) {
+                                        case 'popup':
+                                            if ($i['url_foto'] == '') {
+                                                $img = 'no_image.jpg';
+                                            } else {
+                                                $img = $i['url_foto'];
+                                            }
+
+                                            $imgSrc = '<img src="' . base_url() . 'uploads/foto_iklan/' . $img . '">';
+                                            $url = $i['iklan_url'];
+
+                                            $iklanPopUp = @$iklanPopUp . "
+                                                        <a href=" . $url . " class='img-iklan-md mb-2' target='_blank' rel='noopener'>
+                                                            " . $imgSrc . "
+                                                        </a>
+                                                    ";
+
+                                            break;
+                                        case 'tengah':
+                                            if ($i['url_foto'] == '') {
+                                                $img = 'no_image.jpg';
+                                            } else {
+                                                $img = $i['url_foto'];
+                                            }
+
+                                            $imgSrc = '<img src="' . base_url() . 'uploads/foto_iklan/' . $img . '">';
+                                            $url = $i['iklan_url'];
+
+                                            $iklanTengahDesc = @$iklanTengahDesc . "
+                                                        <br>
+                                                        <a href=" . $url . " class='img-iklan-md mb-2' target='_blank' rel='noopener'>
+                                                            " . $imgSrc . "
+                                                        </a>
+                                                        <br>
+                                                    ";
+
+                                            $wisata_id = $i['wisata_id'];
+
+                                            if (strpos($deskripsi, $wisata_id) !== false) {
+                                                $replace_id_iklan = '#iklan#' . $wisata_id . '#';
+
+                                                $deskripsi = str_replace($replace_id_iklan, $iklanTengahDesc, $deskripsi);
+                                            }
+
+                                            break;
+                                        case 'sidebar':
+                                            if ($i['url_foto'] == '') {
+                                                $img = 'no_image.jpg';
+                                            } else {
+                                                $img = $i['url_foto'];
+                                            }
+
+                                            $imgSrc = '<img src="' . base_url() . 'uploads/foto_iklan/' . $img . '">';
+                                            $url = $i['iklan_url'];
+
+                                            $iklanSibeBar = @$iklanSideBar . "
+                                                        <a href=" . $url . " class='img-iklan-md mb-2' target='_blank' rel='noopener'>
+                                                            " . $imgSrc . "
+                                                        </a>
+                                                    ";
+
+                                            break;
+                                        case 'bawah':
+                                            if ($i['url_foto'] == '') {
+                                                $img = 'no_image.jpg';
+                                            } else {
+                                                $img = $i['url_foto'];
+                                            }
+
+                                            $imgSrc = '<img src="' . base_url() . 'uploads/foto_iklan/' . $img . '">';
+                                            $url = $i['iklan_url'];
+
+                                            $iklanBawah = @$iklanBawah . "
+                                                        <a href=" . $url . " class='img-iklan-lg mb-2' target='_blank' rel='noopener'>
+                                                            " . $imgSrc . "
+                                                        </a>
+                                                    ";
+
+                                            break;
+                                        default:
+                                    }
+                                } else {
+                                }
+                            }
+                            ?>
+
                             <p style="font-size: 13px;"><?php echo $deskripsi ?></p>
                         </div>
                     </div>
@@ -439,31 +536,11 @@
 </section> -->
                             <div class="product-detail__info">
                                 <div class="rating-trip-reviews">
-                                    <?php 
-                                        foreach ($iklan_wisata as $i) {
-                                            if($i['url_foto']==''){ $img = 'no_image.jpg'; }else{ $img = $i['url_foto']; }
-                                            $imgSrc = '<img src="'.base_url().'uploads/foto_iklan/'.$img.'">';
-                                            $url = $i['iklan_url'];
-
-                                            $iklanSideLg = @$iklanSide."
-                                                <a href=".$url." class='img-iklan-lg mb-2'>
-                                                    ".$imgSrc."
-                                                </a>
-                                            ";
-
-                                            $iklanSideMd = @$iklanSide."
-                                            <a href=".$url." class='img-iklan-md mb-2'>
-                                                ".$imgSrc."
-                                            </a>
-                                        ";
-
-                                        }
-                                    ?>
                                     <div class="post">
                                         <div style="display: flex; justify-content: center;">
-                                            <?php echo @$iklanSideLg?>
+                                            <?php echo @$iklanBawah ?>
                                         </div>
-                                        
+
                                         <div class="row mt-3">
                                             <div class="col-md-12">
                                                 <span class="badge" style="font-size: 14px;"><i class="fa fa-eye"></i> <?= $wisata->wisata_tampil; ?> kali</span>
@@ -648,7 +725,7 @@
                             <?php
                             else :
                             ?>
-                               <!-- <div class="row">
+                                <!-- <div class="row">
                                     <div class="col-sm-12 text-center">
                                         <div class="post-link">
                                             <a class="awe-btn awe-btn-style2 load-more">Muat Komentar Lain</a>
@@ -663,16 +740,10 @@
                             ?>
 
                         </div>
-
-
-
-
-
-
                     </div>
-
                 </div>
             </div>
+
             <div class="col-md-3">
                 <div class="page-sidebar">
                     <div class="widget widget_author">
@@ -684,7 +755,7 @@
                         $linkslugwst = base_url('Penulis-Artikel/' . $url_titlewst); ?>
 
                         <div class="post">
-                            <?php echo @$iklanSideMd?>
+                            <?php echo @$iklanSibeBar ?>
                         </div>
 
                         <div class='post'>
@@ -780,7 +851,7 @@
                         </ol>
 
                         <div class="post">
-                            <?php echo @$iklanSideMd?>
+                            <?php echo @$iklanSibeBar ?>
                         </div>
                     </div>
                 </div>
@@ -791,21 +862,23 @@
     </div>
 </section>
 
-<!-- Modal -->
-<div class="modal fade show" id="IklanModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+<?php if (@$iklanPopUp) { ?>
+    <!-- Modal -->
+    <div class="modal fade" id="IklanModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body">
-                        <div class="post">
-                                <?php echo @$iklanSideMd?>
-                        </div>
+                    <div class="post">
+                        <?php echo @$iklanPopUp ?>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary btn-iklan" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="btn-close-iklan" class="btn btn-primary disabled" data-bs-dismiss="modal">Tutup Iklan</button>
                 </div>
             </div>
+        </div>
     </div>
-</div>
+<?php } ?>
 
 <!-- Mirrored from envato.megadrupal.com/html/gofar/single-post.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 13 Oct 2017 02:03:01 GMT -->
 </body>
@@ -827,77 +900,71 @@
     }
 </script>
 <script>
-    $(document).ready(function() {
+    // Load more datakomentar
+    $('.load-more').click(function() {
+    var row = Number($('#row').val());
+    var allcount = Number($('#all').val());
+    var idkomenwis = Number($('#idkomenwis').val());
+    var rowperpage = 3;
+    row = row + rowperpage;
+    console.log(allcount, row, idkomenwis);
+    if (row <= allcount) {
+        $("#row").val(row);
 
-        $('.btn-iklan').click(function() {
-            $('#IklanModal').removeClass("show");
-        });
+        $.ajax({
+            // url: 'getData.php',
+            url: '<?= base_url() ?>Wisata/loadMoreKomentar',
+            type: 'post',
+            data: {
+                row: row,
+                idkomenwis: idkomenwis
+            },
+            beforeSend: function() {
+                $(".load-more").text("Memuat.....");
+            },
+            success: function(response) {
 
-        // Load more datakomentar
-        $('.load-more').click(function() {
-            var row = Number($('#row').val());
-            var allcount = Number($('#all').val());
-            var idkomenwis = Number($('#idkomenwis').val());
-            var rowperpage = 3;
-            row = row + rowperpage;
-            console.log(allcount, row, idkomenwis);
-            if (row <= allcount) {
-                $("#row").val(row);
-
-                $.ajax({
-                    // url: 'getData.php',
-                    url: '<?= base_url() ?>Wisata/loadMoreKomentar',
-                    type: 'post',
-                    data: {
-                        row: row,
-                        idkomenwis: idkomenwis
-                    },
-                    beforeSend: function() {
-                        $(".load-more").text("Memuat.....");
-                    },
-                    success: function(response) {
-
-                        // Setting little delay while displaying new content
-                        setTimeout(function() {
-                            // appending posts after last post with class="post"
-                            $(".post-komen:last").after(response).show().fadeIn("slow");
-
-                            var rowno = row + rowperpage;
-
-                            // checking row value is greater than allcount or not
-                            if (rowno > allcount) {
-
-                                // Change the text and background
-                                $('.load-more').text("Sembunyikan");
-                            } else {
-                                $(".load-more").text("Muat Komentar");
-                            }
-                        }, 2000);
-
-                    }
-                });
-            } else {
-                $('.load-more').text("Memuat...");
-
-                // Setting little delay while removing contents
+                // Setting little delay while displaying new content
                 setTimeout(function() {
+                    // appending posts after last post with class="post"
+                    $(".post-komen:last").after(response).show().fadeIn("slow");
 
-                    // When row is greater than allcount then remove all class='post' element after 3 element
-                    $('.post-komen:nth-child(3)').nextAll('.post-komen').remove();
+                    var rowno = row + rowperpage;
 
-                    // Reset the value of row
-                    $("#row").val(0);
+                    // checking row value is greater than allcount or not
+                    if (rowno > allcount) {
 
-                    // Change the text and background
-                    $('.load-more').text("Muat Komentar");
-
-
+                        // Change the text and background
+                        $('.load-more').text("Sembunyikan");
+                    } else {
+                        $(".load-more").text("Muat Komentar");
+                    }
                 }, 2000);
 
-
             }
-
         });
+    } else {
+        $('.load-more').text("Memuat...");
+
+        // Setting little delay while removing contents
+        setTimeout(function() {
+
+            // When row is greater than allcount then remove all class='post' element after 3 element
+            $('.post-komen:nth-child(3)').nextAll('.post-komen').remove();
+
+            // Reset the value of row
+            $("#row").val(0);
+
+            // Change the text and background
+            $('.load-more').text("Muat Komentar");
+
+
+        }, 2000);
+
+
+    }
+
+    });
 
     });
 </script>
@@ -906,6 +973,8 @@
 <script type="text/javascript">
     (function() {
         window.onload = function() {
+            openModalIklan();
+
             var map;
             //Parameter Google maps
             var options = {
@@ -943,6 +1012,14 @@
             }
 
 
+        };
+
+        function openModalIklan() {
+            $("#IklanModal").modal('show');
+
+            setTimeout(() => {
+                $("#btn-close-iklan").removeClass("disabled");
+            }, 3000)
         };
     })();
 </script>

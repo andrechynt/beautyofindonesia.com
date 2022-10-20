@@ -83,8 +83,8 @@
 <body>
 	<!--<![endif]-->
 	<div id="page-wrap">
-		<div class="preloader">
-		</div>
+		<!-- <div class="preloader">
+		</div> -->
 		<header id="header-page">
 			<div class="header-page__inner">
 				<div class="container">

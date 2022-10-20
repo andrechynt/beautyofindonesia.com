@@ -138,9 +138,9 @@
 
 	<div id="page-wrap">
 
-		<div class="preloader">
+		<!-- <div class="preloader">
 
-		</div>
+		</div> -->
 
 		<header id="header-page">
 

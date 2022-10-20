@@ -141,13 +141,15 @@
         width: 450px;
     }
 
-    .img-iklan-md, .img-iklan-lg {
+    .img-iklan-md,
+    .img-iklan-lg {
         object-fit: cover;
         background-position: center;
         overflow: hidden;
     }
 
-    .img-iklan-md img, .img-iklan-lg img {
+    .img-iklan-md img,
+    .img-iklan-lg img {
         width: 100%;
         height: 100%;
     }
@@ -236,6 +238,100 @@
                                 $deskripsi = @$produk->deskripsi_produk;
                             }
                             ?>
+
+                            <?php
+                            foreach ($iklan_produk as $i) {
+                                if ($i['id_produk'] == $produk->id_produk) {
+                                    $imgSrc = null;
+                                    $url = null;
+                                    $iklanPosisi = $i['iklan_posisi'];
+
+                                    switch ($iklanPosisi) {
+                                        case 'popup':
+                                            if ($i['url_foto'] == '') {
+                                                $img = 'no_image.jpg';
+                                            } else {
+                                                $img = $i['url_foto'];
+                                            }
+
+                                            $imgSrc = '<img src="' . base_url() . 'uploads/foto_iklan/' . $img . '">';
+                                            $url = $i['iklan_url'];
+
+                                            $iklanPopUp = @$iklanPopUp . "
+                                                        <a href=" . $url . " class='img-iklan-md mb-2' target='_blank' rel='noopener'>
+                                                            " . $imgSrc . "
+                                                        </a>
+                                                    ";
+
+                                            break;
+                                        case 'tengah':
+                                            if ($i['url_foto'] == '') {
+                                                $img = 'no_image.jpg';
+                                            } else {
+                                                $img = $i['url_foto'];
+                                            }
+
+                                            $imgSrc = '<img src="' . base_url() . 'uploads/foto_iklan/' . $img . '">';
+                                            $url = $i['iklan_url'];
+
+                                            $iklanTengahDesc = @$iklanTengahDesc . "
+                                                        <br>
+                                                        <a href=" . $url . " class='img-iklan-md mb-2' target='_blank' rel='noopener'>
+                                                            " . $imgSrc . "
+                                                        </a>
+                                                        <br>
+                                                    ";
+
+                                            $produk_id = $i['id_produk'];
+
+                                            if (strpos($deskripsi, $produk_id) !== false) {
+                                                $replace_id_iklan = '#iklan#' . $produk_id . '#';
+
+                                                $deskripsi = str_replace($replace_id_iklan, $iklanTengahDesc, $deskripsi);
+                                            }
+
+                                            break;
+                                        case 'sidebar':
+                                            if ($i['url_foto'] == '') {
+                                                $img = 'no_image.jpg';
+                                            } else {
+                                                $img = $i['url_foto'];
+                                            }
+
+                                            $imgSrc = '<img src="' . base_url() . 'uploads/foto_iklan/' . $img . '">';
+                                            $url = $i['iklan_url'];
+
+                                            $iklanSibeBar = @$iklanSideBar . "
+                                                        <a href=" . $url . " class='img-iklan-md mb-2' target='_blank' rel='noopener'>
+                                                            " . $imgSrc . "
+                                                        </a>
+                                                    ";
+
+                                            break;
+                                        case 'bawah':
+                                            if ($i['url_foto'] == '') {
+                                                $img = 'no_image.jpg';
+                                            } else {
+                                                $img = $i['url_foto'];
+                                            }
+
+                                            $imgSrc = '<img src="' . base_url() . 'uploads/foto_iklan/' . $img . '">';
+                                            $url = $i['iklan_url'];
+
+                                            $iklanBawah = @$iklanBawah . "
+                                                        <a href=" . $url . " class='img-iklan-lg mb-2' target='_blank' rel='noopener'>
+                                                            " . $imgSrc . "
+                                                        </a>
+                                                    ";
+
+                                            break;
+                                        default:
+                                    }
+                                } else {
+                                }
+                            }
+                            ?>
+
                             <p style="font-size: 13px;"><?php echo $deskripsi ?></p>
                         </div>
                     </div>
@@ -327,29 +423,9 @@
 </section> -->
                             <div class="product-detail__info">
                                 <div class="rating-trip-reviews">
-                                <?php 
-                                        foreach ($iklan_produk as $i) {
-                                            if($i['url_foto']==''){ $img = 'no_image.jpg'; }else{ $img = $i['url_foto']; }
-                                            $imgSrc = '<img src="'.base_url().'uploads/foto_iklan/'.$img.'">';
-                                            $url = $i['iklan_url'];
-
-                                            $iklanSideLg = @$iklanSide."
-                                                <a href=".$url." class='img-iklan-lg mb-2'>
-                                                    ".$imgSrc."
-                                                </a>
-                                            ";
-
-                                            $iklanSideMd = @$iklanSide."
-                                                <a href=".$url." class='img-iklan-md mb-2'>
-                                                    ".$imgSrc."
-                                                </a>
-                                            ";
-
-                                        }
-                                    ?>
                                     <div class="post">
                                         <div style="display: flex; justify-content: center;">
-                                            <?php echo @$iklanSideLg?>
+                                            <?php echo @$iklanBawah ?>
                                         </div>
                                         <div class="row mt-3">
                                             <div class="col-md-12">
@@ -580,7 +656,7 @@
                         $linkslug = base_url('Produsen-produk/' . $url_title); ?>
 
                         <div class="post">
-                            <?php echo @$iklanSideMd?>
+                            <?php echo @$iklanSibeBar ?>
                         </div>
 
                         <div class='post'>
@@ -638,7 +714,7 @@
                         </ol>
 
                         <div class="post">
-                            <?php echo @$iklanSideMd?>
+                            <?php echo @$iklanSibeBar ?>
                         </div>
                     </div>
                 </div>
@@ -648,6 +724,25 @@
         </div>
     </div>
 </section>
+
+<?php if (@$iklanPopUp) { ?>
+    <!-- Modal -->
+    <div class="modal fade" id="IklanModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="post">
+                        <?php echo @$iklanPopUp ?>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btn-close-iklan" class="btn btn-primary disabled" data-bs-dismiss="modal">Tutup Iklan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php } ?>
+
 <!-- Mirrored from envato.megadrupal.com/html/gofar/single-post.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 13 Oct 2017 02:03:01 GMT -->
 </body>
 
@@ -749,6 +844,8 @@
 <script type="text/javascript">
     (function() {
         window.onload = function() {
+            openModalIklan();
+
             var map;
             //Parameter Google maps
             var options = {
@@ -784,9 +881,16 @@
                     }
                 })(marker, i));
             }
-
-
         };
+
+        function openModalIklan() {
+            $("#IklanModal").modal('show');
+
+            setTimeout(() => {
+                $("#btn-close-iklan").removeClass("disabled");
+            }, 3000)
+        };
+
     })();
 </script>
 

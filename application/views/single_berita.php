@@ -1,5 +1,6 @@
 <body class="single-post">
     <!--<![endif]-->
+
     <div id="page-wrap">
         <div class="preloader" style="display: none;"></div>
     </div>
@@ -9,27 +10,30 @@
         }
 
         .img-iklan-md {
-        width: 200px;
-        height: 50px;
+            width: 200px;
+            height: 50px;
         }
 
         .img-iklan-lg {
             width: 450px;
         }
 
-        .img-iklan-md, .img-iklan-lg {
+        .img-iklan-md,
+        .img-iklan-lg {
             object-fit: cover;
             background-position: center;
             overflow: hidden;
         }
 
-        .img-iklan-md img, .img-iklan-lg img {
+        .img-iklan-md img,
+        .img-iklan-lg img {
             width: 100%;
             height: 100%;
         }
     </style>
     <!-- <title><?php //echo get_phrase(substr(@$detail_berita->berita_judul, 0, 52) . ".. " . "| Artikel"); 
                 ?></title> -->
+
     <section class="awe-parallax page-heading-demo" style="background-position: 50% 12px;">
         <div class="awe-overlay"></div>
         <div class="container">
@@ -44,10 +48,74 @@
                 <div class="col-md-9">
                     <div class="blog-page__content blog-single">
                         <div class="post">
-                            <div class="post-meta">
 
+                        <?php
+                            foreach ($iklan_artikel as $i) {
+                                if ($i['berita_id'] == $detail_berita->berita_id) {
+                                    $imgSrc = null;
+                                    $url = null;
+                                    $iklanPosisi = $i['iklan_posisi'];
+                                    $berita_deskripsi = $detail_berita->berita_deskripsi;
 
-                            </div>
+                                    switch ($iklanPosisi) {
+                                        case 'popup':
+                                            if ($i['url_foto'] == '') {
+                                                $img = 'no_image.jpg';
+                                            } else {
+                                                $img = $i['url_foto'];
+                                            }
+
+                                            $imgSrc = '<img src="' . base_url() . 'uploads/foto_iklan/' . $img . '">';
+                                            $url = $i['iklan_url'];
+
+                                            $iklanPopUp = @$iklanPopUp . "
+                                                        <a href=" . $url . " class='img-iklan-md mb-2' target='_blank' rel='noopener'>
+                                                            " . $imgSrc . "
+                                                        </a>
+                                                    ";
+
+                                            break;
+                                        case 'sidebar':
+                                            if ($i['url_foto'] == '') {
+                                                $img = 'no_image.jpg';
+                                            } else {
+                                                $img = $i['url_foto'];
+                                            }
+
+                                            $imgSrc = '<img src="' . base_url() . 'uploads/foto_iklan/' . $img . '">';
+                                            $url = $i['iklan_url'];
+
+                                            $iklanSibeBar = @$iklanSideBar . "
+                                                        <a href=" . $url . " class='img-iklan-md mb-2' target='_blank' rel='noopener'>
+                                                            " . $imgSrc . "
+                                                        </a>
+                                                    ";
+
+                                            break;
+                                        case 'bawah':
+                                            if ($i['url_foto'] == '') {
+                                                $img = 'no_image.jpg';
+                                            } else {
+                                                $img = $i['url_foto'];
+                                            }
+
+                                            $imgSrc = '<img src="' . base_url() . 'uploads/foto_iklan/' . $img . '">';
+                                            $url = $i['iklan_url'];
+
+                                            $iklanBawah = @$iklanBawah . "
+                                                        <a href=" . $url . " class='img-iklan-lg mb-2' target='_blank' rel='noopener'>
+                                                            " . $imgSrc . "
+                                                        </a>
+                                                    ";
+
+                                            break;
+                                        default:
+                                    }
+                                } else {
+                                }
+                            }
+                            ?>
+
                             <?php
                             if ($this->session->userdata('current_language') == 'english') {
                                 $gambar = '<img src="' . base_url() . 'uploads/berita/' . $detail_berita_en->berita_foto . '" alt="' . $title . '">';
@@ -79,28 +147,8 @@
                             ?>
                             <?php echo $data ?>
 
-                            <?php 
-                                foreach ($iklan_artikel as $i) {
-                                    if($i['url_foto']==''){ $img = 'no_image.jpg'; }else{ $img = $i['url_foto']; }
-                                    $imgSrc = '<img src="'.base_url().'uploads/foto_iklan/'.$img.'">';
-                                    $url = $i['iklan_url'];
-
-                                    $iklanSideLg = @$iklanSideLg."
-                                        <a href=".$url." class='img-iklan-lg mb-2'>
-                                            ".$imgSrc."
-                                        </a>
-                                    ";
-
-                                    $iklanSideMd = @$iklanSideMd."
-                                        <a href=".$url." class='img-iklan-md mb-2'>
-                                            ".$imgSrc."
-                                        </a>
-                                    ";
-
-                                }
-                            ?>
                             <div style="display: flex; justify-content: center;">
-                                <?php echo @$iklanSideLg?>
+                                <?php echo @$iklanBawah ?>
                             </div>
                         </div>
 
@@ -191,7 +239,7 @@
                             $linkslug = base_url('Penulis-Artikel/' . $url_title); ?>
 
                             <div class="post">
-                                <?php echo @$iklanSideMd?>
+                                <?php echo @$iklanSibeBar ?>
                             </div>
 
                             <div class='post'>
@@ -291,7 +339,7 @@
                         </div>
 
                         <div class="post">
-                            <?php echo @$iklanSideMd?>
+                            <?php echo @$iklanSibeBar ?>
                         </div>
 
                     </div>
@@ -299,6 +347,41 @@
             </div>
         </div>
     </section>
+
+    <?php if (@$iklanPopUp) { ?>
+    <!-- Modal -->
+    <div class="modal fade" id="IklanModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="post">
+                        <?php echo @$iklanPopUp ?>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btn-close-iklan" class="btn btn-primary disabled" data-bs-dismiss="modal">Tutup Iklan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php } ?>
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        (function() {
+            window.onload = function() {
+                //openModalIklan();
+            };
+
+            function openModalIklan() {
+                $("#IklanModal").modal('show');
+
+                setTimeout(() => {
+                    $("#btn-close-iklan").removeClass("disabled");
+                }, 3000)
+            };
+        })();
+    </script>
 
     <!-- Mirrored from envato.megadrupal.com/html/gofar/single-post.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 13 Oct 2017 02:03:01 GMT -->
 </body>
