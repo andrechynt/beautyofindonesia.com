@@ -1,3 +1,107 @@
+<style>
+    .img-iklan-md {
+        width: 200px;
+        height: 50px;
+    }
+
+    .img-iklan-lg {
+        width: 450px;
+    }
+
+    .img-iklan-md,
+    .img-iklan-lg {
+        object-fit: cover;
+        background-position: center;
+        overflow: hidden;
+    }
+
+    .img-iklan-md img,
+    .img-iklan-lg img {
+        width: 100%;
+        height: 100%;
+    }
+</style>
+<?php
+foreach ($iklan_beranda as $i) {
+    $imgSrc = null;
+    $url = null;
+    $iklanPosisi = $i['iklan_posisi'];
+
+    switch ($iklanPosisi) {
+        case 'popup':
+            if ($i['url_foto'] == '') {
+                $img = 'no_image.jpg';
+            } else {
+                $img = $i['url_foto'];
+            }
+
+            $imgSrc = '<img src="' . base_url() . 'uploads/foto_iklan/' . $img . '">';
+            $url = $i['iklan_url'];
+
+            $iklanPopUp = @$iklanPopUp . "
+                            <a href=" . $url . " class='img-iklan-md' target='_blank' rel='noopener'>
+                                " . $imgSrc . "
+                            </a>
+                        ";
+
+            break;
+        case 'slider':
+            if ($i['url_foto'] == '') {
+                $img = 'no_image.jpg';
+            } else {
+                $img = $i['url_foto'];
+            }
+
+            $imgSrc = base_url() . "uploads/foto_iklan/" . $img;
+            $url = $i['iklan_url'];
+
+            $iklanSlider = @$iklanSlider . "
+                    <li data-slotamount='7' data-masterspeed='500' data-title=''>
+                        <a href=" . $url . " target='_blank' rel='noopener' data-bgposition='left center' data-duration='14000' data-bgpositionend='right center' style='width: 100%;'>
+                            <img src=" . $imgSrc . " alt='' style='width: 100%;'>
+                        </a>
+                    </li>
+                ";
+
+            break;
+        case 'sidebar':
+            if ($i['url_foto'] == '') {
+                $img = 'no_image.jpg';
+            } else {
+                $img = $i['url_foto'];
+            }
+
+            $imgSrc = '<img src="' . base_url() . 'uploads/foto_iklan/' . $img . '">';
+            $url = $i['iklan_url'];
+
+            $iklanSibeBar = @$iklanSideBar . "
+                            <a href=" . $url . " class='img-iklan-md' target='_blank' rel='noopener'>
+                                " . $imgSrc . "
+                            </a>
+                        ";
+
+            break;
+        case 'bawah':
+            if ($i['url_foto'] == '') {
+                $img = 'no_image.jpg';
+            } else {
+                $img = $i['url_foto'];
+            }
+
+            $imgSrc = '<img src="' . base_url() . 'uploads/foto_iklan/' . $img . '">';
+            $url = $i['iklan_url'];
+
+            $iklanBawah = @$iklanBawah . "
+                            <a href=" . $url . " class='img-iklan-lg' target='_blank' rel='noopener'>
+                                " . $imgSrc . "
+                            </a>
+                        ";
+
+            break;
+        default:
+    }
+}
+?>
 <section class="hero-section">
     <div id="slider-revolution">
         <ul>
@@ -24,6 +128,7 @@
                 }
             }
             ?>
+            <?php echo $iklanSlider; ?>
             <?php echo $slidere; ?>
         </ul>
     </div>
@@ -131,8 +236,8 @@
                     foreach ($array as $item) {
                         $link2 = base_url('Berita/tag_berita/' . $item);
                         $tag = @$tag . "
-												<a href=" . $link2 . ">" . $item . "</a> 
-											";
+                            <a href=" . $link2 . ">" . $item . "</a> 
+                        ";
                     }
                     $data =  @$data . "
 										<div class='post'>
@@ -258,8 +363,10 @@
                     <div class="page__pagination">
                         <?php echo $halaman; ?>
                     </div>
-
                     <hr />
+                    <div class="post">
+                        <?php echo $iklanBawah; ?>
+                    </div>
                     <!-- <div class="hotel-item">
 							<div class="item-price-more">
 								<div class="price"><?php if ($this->session->userdata('current_language') == 'english') {
@@ -470,6 +577,10 @@
                         </form>
                     </div>
 
+                    <div class="widget ">
+                        <?php echo $iklanSibeBar; ?>
+                    </div>
+
                     <div class="widget widget_tag_cloud">
                         <h3><?php echo get_phrase('Tags Artikel'); ?></h3>
                         <div class="tagcloud">
@@ -484,6 +595,10 @@
                                 <?php } ?>
                             <?php endforeach ?>
                         </div>
+                    </div>
+
+                    <div class="widget ">
+                        <?php echo $iklanSibeBar; ?>
                     </div>
 
                     <div class="widget widget_categories">
@@ -518,6 +633,23 @@
         </div>
     </div>
 </section>
+<?php if (@$iklanPopUp) { ?>
+	<!-- Modal -->
+	<div class="modal fade" id="IklanModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" role="dialog" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+					<div class="modal-content">
+							<div class="modal-body">
+									<div class="post">
+											<?php echo @$iklanPopUp ?>
+									</div>
+							</div>
+							<div class="modal-footer">
+									<button type="button" id="btn-close-iklan" class="btn btn-primary disabled" data-bs-dismiss="modal"></button>
+							</div>
+					</div>
+			</div>
+	</div>
+<?php } ?>
 <script type="text/javascript">
     var _gaq = _gaq || [];
     _gaq.push(['_setAccount', 'UA-36251023-1']);
@@ -532,4 +664,32 @@
         var s = document.getElementsByTagName('script')[0];
         s.parentNode.insertBefore(ga, s);
     })();
+
+    (function() {
+        window.onload = function() {
+            //openModalIklan();
+        };
+
+        function openModalIklan() {
+            let count = 5;
+            let timer = null;
+            $("#IklanModal").modal('show');
+
+            (function countDown() {
+                // Display counter and start counting down
+                $("#btn-close-iklan").text(count);
+
+                // Run the function again every second if the count is not zero
+                if (count !== 0) {
+                    timer = setTimeout(countDown, 1000);
+                    count--; // decrease the timer
+                } else {
+                    // Enable the button
+                    $("#btn-close-iklan").text("Tutup iklan");
+                    $("#btn-close-iklan").removeClass("disabled");
+                }
+            }());
+        };
+    })();
+
 </script>

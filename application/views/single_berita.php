@@ -30,6 +30,17 @@
             width: 100%;
             height: 100%;
         }
+
+        #gambar-wisata {
+            float: none;
+        }
+
+        @media (min-width: 768px) { 
+            #gambar-wisata {
+                float: left;
+            }
+        }
+
     </style>
     <!-- <title><?php //echo get_phrase(substr(@$detail_berita->berita_judul, 0, 52) . ".. " . "| Artikel"); 
                 ?></title> -->
@@ -46,7 +57,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-9">
-                    <div class="blog-page__content blog-single">
+                    <div class="blog-page__content">
                         <div class="post">
 
                         <?php
@@ -116,9 +127,73 @@
                             }
                             ?>
 
+                            <?php 
+                            $get_deskripsi =  $detail_berita->berita_deskripsi;
+                            $get_tag_wisata =  strstr($get_deskripsi, "#wisata");
+                            $deskripsi_with_wisata = null;
+
+                            if ($get_tag_wisata) {
+                                $explode_id= explode("#wisata#", $get_tag_wisata);
+                                $id_iklan = array();
+
+                                foreach($explode_id as $i){
+                                    $id_iklan[] = strstr($i, '#', true);
+                                }
+
+                                foreach($get_wisata as $w) {
+                                    if(in_array($w['wisata_id'], $id_iklan)) {
+                                        if ($w['url_file_foto'] == '') {
+                                            $cover = 'no_image.jpg';
+                                        } else {
+                                            $cover = $w['url_file_foto'];
+                                        }
+
+                                        $wisataNama = $w['wisata_nama'];
+                                        $gambar = '<img class ="card-img-top" src="' . base_url() . 'uploads/foto_wisata/' . $cover . '" alt ="' . $w['wisata_nama'].'">';
+                                        $link = base_url() . 'Tempat-Wisata/' . $w['kategori_nama'] . '/' . str_replace(' ', '-', $w["nama_provinsi"]) . '/' . str_replace(' ', '-', $w["nama_kota_kabupaten"]) . '/' . str_replace(' ', '-', $wisataNama);
+                                        $get_deskripsi = $deskripsi_with_wisata == null ? $get_deskripsi : $deskripsi_with_wisata;
+    
+                                        $deskripsi_with_wisata = @$deskripsi_with_wisata . "
+                                        <div class='post'>
+                                            <div class='post-media' id='gambar-wisata' style='width: 18rem;'>
+                                                <a class='klik-id' href='". $link ."'>" . $gambar . "</a>
+                                            </div>
+                                            <div class='post-body'>
+                                                <div class='post-title'>
+                                                    <form action=" . $link . " method='post'>
+                                                        <input type='hidden' name=" . $this->security->get_csrf_token_name() . " value=" . $this->security->get_csrf_hash() . ">
+
+                                                        <input type='hidden' name='id_artikel' value=" . $w['wisata_id'] . ">
+                                                        <button style='text-align: left;background: rgba(0,0,0,0.0);border-style: none;'><h2 id='linkSlug'>
+                                                                " . $wisataNama . "</h2></button>
+                                                    </form>
+                                                </div>
+                                                
+                                                <div class='post-link' style='margin-top: 2rem !important;'>
+                                                    <form action=" . $link . " method='post'>
+                                                        <input type='hidden' name=" . $this->security->get_csrf_token_name() . " value=" . $this->security->get_csrf_hash() . ">
+
+                                                        <input type='hidden' name='id_artikel' value=" . $w['wisata_id'] . ">
+                                                        <button style='text-align: left;background: rgba(0,0,0,0.0);border-style: none;'><a class='awe-btn awe-btn-style2 klik-id'>
+                                                                " . get_phrase('Baca Selengkapnya') . "</a></button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        ";
+
+                                        $text_replace = '#wisata#' . $w['wisata_id'] . '#';
+                                        $deskripsi_with_wisata = str_replace($text_replace, $deskripsi_with_wisata, $get_deskripsi);
+                                        $get_deskripsi = $deskripsi_with_wisata;
+                                    }
+                                }
+                            }
+                            ?>
+
                             <?php
                             if ($this->session->userdata('current_language') == 'english') {
                                 $gambar = '<img src="' . base_url() . 'uploads/berita/' . $detail_berita_en->berita_foto . '" alt="' . $title . '">';
+                                $deskripsi = $deskripsi_with_wisata != null ? $deskripsi_with_wisata : $detail_berita_en->berita_deskripsi;
                                 $data =  @$data . "
 									<div class='post-meta'>
 									<div class='date'>" . longdate_indo($detail_berita_en->berita_tgl) . "</div>
@@ -127,11 +202,12 @@
 									<div class='post-title'><h1>" . $detail_berita_en->berita_judul . "</h1></div>
 										<div class='post-media'><div class='image-wrap'>" . $gambar . "</div></div>
 									<div class='post-body'><div class='post-content'>
-									<p>" . $detail_berita_en->berita_deskripsi . "</p>
+									<p>" . $deskripsi . "</p>
 									</div></div>
 								";
                             } else {
                                 $gambar = '<img src="' . base_url() . 'uploads/berita/' . $detail_berita->berita_foto . '" alt="' . $title . '">';
+                                $deskripsi = $deskripsi_with_wisata != null ? $deskripsi_with_wisata : $detail_berita->berita_deskripsi;
                                 $data =  @$data . "
 									<div class='post-meta'>
 									<div class='date'>" . longdate_indo($detail_berita->berita_tgl) . "</div>
@@ -140,11 +216,12 @@
 									<div class='post-title'><h1>" . $detail_berita->berita_judul . "</h1></div>
 										<div class='post-media'><div class='image-wrap'>" . $gambar . "</div></div>
 									<div class='post-body'><div class='post-content'>
-									<p>" . $detail_berita->berita_deskripsi . "</p>
+									<p>" . $deskripsi . "</p>
 									</div></div>
 								";
                             }
                             ?>
+
                             <?php echo $data ?>
 
                             <div style="display: flex; justify-content: center;">

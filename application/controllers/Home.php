@@ -27,6 +27,7 @@ class Home extends CI_Controller
 		$data_header['menu_produk'] = $this->Model->menu_produk()->result_array();
 		$data_header['title'] = $this->Model->tampil_setup()->row()->wisata_nama;
 		$data_header['menu_kategori'] = $this->Model->menu_kategori()->result_array();
+		$data_header['iklan_beranda'] = $this->db->get('iklan_beranda')->result_array();
 		$this->load->view('header', $data_header);
 
 		$data['tampil_slider'] = $this->Model->tampil_slider()->result_array();
@@ -98,6 +99,8 @@ class Home extends CI_Controller
 
 		$this->db->where('info_tahun', date('Y'));
 		$data['grafik_pendapatan'] = $this->db->get('info')->row();
+
+		$data['iklan_beranda'] = $this->db->get('iklan_beranda')->result_array();
 
 		$this->load->view('index', $data);
 

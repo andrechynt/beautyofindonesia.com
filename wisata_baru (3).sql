@@ -1245,19 +1245,31 @@ CREATE TABLE `wahana_wisata` (
 --
 
 CREATE TABLE `iklan_wisata` (
-  `iklan_id` int(11) NOT NULL,
+  `iklan_id` int(11) NOT NULL PRIMARY KEY,
   `iklan_nama` varchar(50) NOT NULL,
   `url_foto` varchar(150) NOT NULL,
   `iklan_url` varchar(150) NOT NULL,
-  `createAt`  timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `createAt`  timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `iklan_posisi` varchar(50) NOT NULL,
+  `harga_iklan` varchar(20) NOT NULL,
+  `bagian_penulis` varchar(20) NOT NULL,
+  `bagian_management` varchar(20) NOT NULL,
+  `tanggal_mulai` datetime  DEFAULT NULL,
+  `tanggal_akhir` datetime  DEFAULT NULL,
+  `wisata_id` int(11)  DEFAULT NULL,
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data untuk tabel `iklan_wisata`
 --
 
-INSERT INTO `iklan_wisata` (`iklan_id`, `iklan_nama`, `url_foto`, `iklan_url`, `createAt`) VALUES
-(1, 'TRAVELOKA', 'traveloka-iklan.jpg', 'https://www.traveloka.com/id-id/', '2022-10-17 15:28:40');
+INSERT INTO `iklan_wisata` (`iklan_id`, `iklan_nama`, `url_foto`, `iklan_url`, `createAt`, `iklan_posisi`, `harga_iklan`, `bagian_penulis`, `bagian_management`, `tanggal_mulai`, `tanggal_akhir`, `wisata_id`) VALUES
+(1, 'TRAVELOKA', 'traveloka-iklan.jpg', 'https://www.traveloka.com/id-id/', '2022-10-20 09:40:33', 'popup', '', '', '', '2022-11-01 07:00:00', '2022-12-01 07:00:00', 1),
+(2, 'OYO', 'oyo-iklan.jpg', 'https://www.oyorooms.com/us/?utm_medium=342&utm_source=Social_O_web&utm_term=6bf286893edc4fe9a26c5fd3b-362459', '2022-10-20 09:55:05', 'tengah', '', '', '', '2022-11-01 07:00:00', '2022-12-01 07:00:00', 1),
+(3, 'RED DOORZ', 'red-iklan.gif', 'https://www.reddoorz.com/id-id', '2022-10-20 10:06:21', 'sidebar', '', '', '', '2022-11-01 07:00:00', '2022-12-01 07:00:00', 1),
+(4, 'TRIVAGO', 'trivago-iklan.gif', 'https://www.trivago.co.id/en-ID?rl=en-ID', '2022-10-20 10:04:19', 'bawah', '', '', '', '2022-11-01 07:00:00', '2022-12-01 07:00:00', 1);
+
+
 
 -- --------------------------------------------------------
 
@@ -1266,19 +1278,29 @@ INSERT INTO `iklan_wisata` (`iklan_id`, `iklan_nama`, `url_foto`, `iklan_url`, `
 --
 
 CREATE TABLE `iklan_produk` (
-  `iklan_id` int(11) NOT NULL,
+  `iklan_id` int(11) NOT NULL PRIMARY KEY,
   `iklan_nama` varchar(50) NOT NULL,
   `url_foto` varchar(150) NOT NULL,
   `iklan_url` varchar(150) NOT NULL,
-  `createAt`  timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `createAt`  timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `iklan_posisi` varchar(50) NOT NULL,
+  `harga_iklan` varchar(20) NOT NULL,
+  `bagian_penulis` varchar(20) NOT NULL,
+  `bagian_management` varchar(20) NOT NULL,
+  `tanggal_mulai` datetime  DEFAULT NULL,
+  `tanggal_akhir` datetime  DEFAULT NULL,
+  `id_produk` int(11)  DEFAULT NULL,
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data untuk tabel `iklan_produk`
 --
 
-INSERT INTO `iklan_produk` (`iklan_id`, `iklan_nama`, `url_foto`, `iklan_url`, `createAt`) VALUES
-(1, 'TRAVELOKA', 'traveloka-iklan.jpg', 'https://www.traveloka.com/id-id/', '2022-10-17 15:28:40');
+INSERT INTO `iklan_produk` (`iklan_id`, `iklan_nama`, `url_foto`, `iklan_url`, `createAt`, `iklan_posisi`, `harga_iklan`, `bagian_penulis`, `bagian_management`, `tanggal_mulai`, `tanggal_akhir`, `id_produk`) VALUES
+(1, 'TRAVELOKA', 'traveloka-iklan.jpg', 'https://www.traveloka.com/id-id/', '2022-10-20 10:16:40', 'popup', '', '', '', '2022-11-01 07:00:00', '2022-12-01 07:00:00', 1),
+(2, 'OYO', 'oyo-iklan.jpg', 'https://www.oyorooms.com/us/?utm_medium=342&utm_source=Social_O_web&utm_term=6bf286893edc4fe9a26c5fd3b-362459', '2022-10-20 09:55:05', 'sidebar', '', '', '', '2022-11-01 07:00:00', '2022-12-01 07:00:00', 1),
+(3, 'TRIVAGO', 'trivago-iklan.gif', 'https://www.trivago.co.id/en-ID?rl=en-ID', '2022-10-20 10:04:19', 'bawah', '', '', '', '2022-11-01 07:00:00', '2022-12-01 07:00:00', 1);
+
 
 -- --------------------------------------------------------
 
@@ -1287,19 +1309,58 @@ INSERT INTO `iklan_produk` (`iklan_id`, `iklan_nama`, `url_foto`, `iklan_url`, `
 --
 
 CREATE TABLE `iklan_artikel` (
-  `iklan_id` int(11) NOT NULL,
+  `iklan_id` int(11) NOT NULL PRIMARY KEY,
   `iklan_nama` varchar(50) NOT NULL,
   `url_foto` varchar(150) NOT NULL,
   `iklan_url` varchar(150) NOT NULL,
-  `createAt`  timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `createAt`  timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `iklan_posisi` varchar(50) NOT NULL,
+  `harga_iklan` varchar(20) NOT NULL,
+  `bagian_penulis` varchar(20) NOT NULL,
+  `bagian_management` varchar(20) NOT NULL,
+  `tanggal_mulai` datetime  DEFAULT NULL,
+  `tanggal_akhir` datetime  DEFAULT NULL,
+  `berita_id` int(11)  DEFAULT NULL,
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data untuk tabel `iklan_artikel`
 --
 
-INSERT INTO `iklan_artikel` (`iklan_id`, `iklan_nama`, `url_foto`, `iklan_url`, `createAt`) VALUES
-(1, 'TRAVELOKA', 'traveloka-iklan.jpg', 'https://www.traveloka.com/id-id/', '2022-10-17 15:28:40');
+INSERT INTO `iklan_artikel` (`iklan_id`, `iklan_nama`, `url_foto`, `iklan_url`, `createAt` `iklan_posisi`, `harga_iklan`, `bagian_penulis`, `bagian_management`, `tanggal_mulai`, `tanggal_akhir`, `berita_id`) VALUES
+(1, 'TRAVELOKA', 'traveloka-iklan.jpg', 'https://www.traveloka.com/id-id/', '2022-10-20 10:16:40', 'popup', '', '', '', '2022-11-01 07:00:00', '2022-12-01 07:00:00', 7),
+(2, 'OYO', 'oyo-iklan.jpg', 'https://www.oyorooms.com/us/?utm_medium=342&utm_source=Social_O_web&utm_term=6bf286893edc4fe9a26c5fd3b-362459', '2022-10-20 09:55:05', 'sidebar', '', '', '', '2022-11-01 07:00:00', '2022-12-01 07:00:00', 7),
+(3, 'TRIVAGO', 'trivago-iklan.gif', 'https://www.trivago.co.id/en-ID?rl=en-ID', '2022-10-20 10:04:19', 'bawah', '', '', '', '2022-11-01 07:00:00', '2022-12-01 07:00:00', 7);
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `iklan_beranda`
+--
+
+CREATE TABLE `iklan_beranda` (
+  `iklan_id` int(11) NOT NULL PRIMARY KEY,
+  `iklan_nama` varchar(50) NOT NULL,
+  `url_foto` varchar(150) NOT NULL,
+  `iklan_url` varchar(150) NOT NULL,
+  `createAt`  timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `iklan_posisi` varchar(50) NOT NULL,
+  `harga_iklan` varchar(20) NOT NULL,
+  `bagian_penulis` varchar(20) NOT NULL,
+  `bagian_management` varchar(20) NOT NULL,
+  `tanggal_mulai` datetime  DEFAULT NULL,
+  `tanggal_akhir` datetime  DEFAULT NULL,
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data untuk tabel `iklan_beranda`
+--
+
+INSERT INTO `iklan_artikel` (`iklan_id`, `iklan_nama`, `url_foto`, `iklan_url`, `createAt` `iklan_posisi`, `harga_iklan`, `bagian_penulis`, `bagian_management`, `tanggal_mulai`, `tanggal_akhir`) VALUES
+(1, 'TRAVELOKA', 'traveloka-iklan.jpg', 'https://www.traveloka.com/id-id/', '2022-10-20 10:16:40', 'popup', '', '', '', '2022-11-01 07:00:00', '2022-12-01 07:00:00'),
+(2, 'OYO', 'oyo-iklan.jpg', 'https://www.oyorooms.com/us/?utm_medium=342&utm_source=Social_O_web&utm_term=6bf286893edc4fe9a26c5fd3b-362459', '2022-10-20 09:55:05', 'slider', '', '', '', '2022-11-01 07:00:00', '2022-12-01 07:00:00'),
+(3, 'TRIVAGO', 'trivago-iklan.gif', 'https://www.trivago.co.id/en-ID?rl=en-ID', '2022-10-20 10:04:19', 'sidebar', '', '', '', '2022-11-01 07:00:00', '2022-12-01 07:00:00'),
+(4, 'RED DOORZ', 'red-iklan.gif', 'https://www.reddoorz.com/id-id', '2022-10-20 10:06:21', 'bawah', '', '', '', '2022-11-01 07:00:00', '2022-12-01 07:00:00');
 
 -- --------------------------------------------------------
 

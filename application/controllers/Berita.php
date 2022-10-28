@@ -58,6 +58,7 @@ class Berita extends CI_Controller
 		$data['tahun']	 = $this->Model->sitemap()->result_array();
 		$data['artikel_lain'] = $this->Model->berita_artikel()->result();
 		$data['iklan_artikel'] = $this->Model->iklan_artikel()->result_array();
+		$data['get_wisata'] = $this->Model->tampilwisata()->result_array();
 		// var_dump($data['detail_berita']);die;
 		$this->load->view('single_berita', $data);
 

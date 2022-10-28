@@ -145,7 +145,7 @@
     .img-iklan-lg {
         object-fit: cover;
         background-position: center;
-        overflow: hidden;
+        overflow: hidden !important;
     }
 
     .img-iklan-md img,
@@ -153,6 +153,24 @@
         width: 100%;
         height: 100%;
     }
+
+    #gambar-wisata {
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    @media (min-width: 768px) { 
+        #gambar-wisata {
+            width: 80%;
+        }
+    }
+
+    @media (min-width: 992px) { 
+        #gambar-wisata {
+            width: 60%;
+        }
+    }
+
 </style>
 
 <title><?php
@@ -259,7 +277,7 @@
                                             $url = $i['iklan_url'];
 
                                             $iklanPopUp = @$iklanPopUp . "
-                                                        <a href=" . $url . " class='img-iklan-md mb-2' target='_blank' rel='noopener'>
+                                                        <a href=" . $url . " class='img-iklan-md' target='_blank' rel='noopener'>
                                                             " . $imgSrc . "
                                                         </a>
                                                     ";
@@ -272,24 +290,24 @@
                                                 $img = $i['url_foto'];
                                             }
 
-                                            $imgSrc = '<img src="' . base_url() . 'uploads/foto_iklan/' . $img . '">';
+                                            $imgSrc = '<img src="' . base_url() . 'uploads/foto_iklan/' . $img . '" style="width: 100%; height: 100%" >';
                                             $url = $i['iklan_url'];
 
                                             $iklanTengahDesc = @$iklanTengahDesc . "
                                                         <br>
-                                                        <a href=" . $url . " class='img-iklan-md mb-2' target='_blank' rel='noopener'>
-                                                            " . $imgSrc . "
-                                                        </a>
+                                                        <div class='post'>
+                                                            <div class='post-media' id='gambar-wisata'>
+                                                                <a class='klik-id' href='". $url ."'>" . $imgSrc . "</a>
+                                                            </div>
+                                                        </div>
                                                         <br>
                                                     ";
 
-                                            $wisata_id = $i['wisata_id'];
-
-                                            if (strpos($deskripsi, $wisata_id) !== false) {
-                                                $replace_id_iklan = '#iklan#' . $wisata_id . '#';
-
-                                                $deskripsi = str_replace($replace_id_iklan, $iklanTengahDesc, $deskripsi);
-                                            }
+                                            $get_tag_iklan = strstr($deskripsi ,"#iklan");
+                                            $explode = explode("#iklan#", $get_tag_iklan);
+                                            
+                                            $replace_id_iklan = '#iklan#' . strstr($explode[1], '#', true) . '#';
+                                            $deskripsi = str_replace($replace_id_iklan, $iklanTengahDesc, $deskripsi);
 
                                             break;
                                         case 'sidebar':
@@ -303,7 +321,7 @@
                                             $url = $i['iklan_url'];
 
                                             $iklanSibeBar = @$iklanSideBar . "
-                                                        <a href=" . $url . " class='img-iklan-md mb-2' target='_blank' rel='noopener'>
+                                                        <a href=" . $url . " class='img-iklan-md' target='_blank' rel='noopener'>
                                                             " . $imgSrc . "
                                                         </a>
                                                     ";
@@ -320,7 +338,7 @@
                                             $url = $i['iklan_url'];
 
                                             $iklanBawah = @$iklanBawah . "
-                                                        <a href=" . $url . " class='img-iklan-lg mb-2' target='_blank' rel='noopener'>
+                                                        <a href=" . $url . " class='img-iklan-lg' target='_blank' rel='noopener'>
                                                             " . $imgSrc . "
                                                         </a>
                                                     ";
@@ -537,7 +555,7 @@
                             <div class="product-detail__info">
                                 <div class="rating-trip-reviews">
                                     <div class="post">
-                                        <div style="display: flex; justify-content: center;">
+                                        <div style="display: flex; justify-content: center;" class="mb-4">
                                             <?php echo @$iklanBawah ?>
                                         </div>
 
@@ -754,7 +772,7 @@
                         $url_titlewst = url_title($penulis_wisata->penulis_nama, '-', TRUE);
                         $linkslugwst = base_url('Penulis-Artikel/' . $url_titlewst); ?>
 
-                        <div class="post">
+                        <div class="post mb-2">
                             <?php echo @$iklanSibeBar ?>
                         </div>
 
@@ -850,7 +868,7 @@
                             <?php endforeach; ?>
                         </ol>
 
-                        <div class="post">
+                        <div class="post mb-2">
                             <?php echo @$iklanSibeBar ?>
                         </div>
                     </div>
@@ -873,7 +891,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="btn-close-iklan" class="btn btn-primary disabled" data-bs-dismiss="modal">Tutup Iklan</button>
+                    <button type="button" id="btn-close-iklan" class="btn btn-primary disabled" data-bs-dismiss="modal"></button>
                 </div>
             </div>
         </div>
@@ -1015,11 +1033,24 @@
         };
 
         function openModalIklan() {
+            let count = 5;
+            let timer = null;
             $("#IklanModal").modal('show');
-
-            setTimeout(() => {
-                $("#btn-close-iklan").removeClass("disabled");
-            }, 3000)
+          
+            (function countDown(){
+                // Display counter and start counting down
+                $("#btn-close-iklan").text(count);
+                
+                // Run the function again every second if the count is not zero
+                if(count !== 0){
+                    timer = setTimeout(countDown, 1000);
+                    count--; // decrease the timer
+                } else {
+                    // Enable the button
+                    $("#btn-close-iklan").text("Tutup iklan");
+                    $("#btn-close-iklan").removeClass("disabled");
+                }
+            }());
         };
     })();
 </script>

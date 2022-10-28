@@ -1189,12 +1189,15 @@ class Model extends CI_Model
 		return $this->db->get('produk');
 	}
 
-	function get_all_wisata($limit, $offset)
+	function get_all_wisata($limit = null, $offset = null)
 	{
 		$this->db->select("wisata.wisata_nama as wisata_nama");
 		$this->db->select("wisata.wisata_deskripsi as wisata_deskripsi");
 		$this->db->select("wisata.wisata_deskripsi as nama_jenis");
 		$this->db->select("wisata.wisata_id as wisata_id");
+		$this->db->select("wisata.wisata_tag as wisata_tag");
+		$this->db->select("wisata.nama_provinsi as nama_provinsi");
+		$this->db->select("wisata.nama_kota_kabupaten as nama_kota_kabupaten");
 		$this->db->select("foto.url_file_foto as nama_foto");
 		$this->db->from("wisata")
 			->join("foto", "foto.wisata_id=wisata.wisata_id", "left");
@@ -1642,6 +1645,4 @@ class Model extends CI_Model
 	public function iklan_artikel() {
 		return $this->db->get('iklan_artikel');
 	}
-
-	
 }

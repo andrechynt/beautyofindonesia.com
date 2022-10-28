@@ -491,7 +491,6 @@ class Wisata extends CI_Controller
 		// $nama= $this->Model->tampil(4,$id)->row()->wisata_nama;
 		// $data_header['title']=$prov.' '.$kota.' '.$nama;
 		$data_header['wisata'] = $this->Model->tampil(4, $id)->row();
-		$data_header['iklan_wisata'] = $this->Model->iklan_wisata()->result_array();
 		$this->load->view('headerwisata', $data_header);
 
 		$data['wisata'] = $this->Model->tampil(4, $id)->row();

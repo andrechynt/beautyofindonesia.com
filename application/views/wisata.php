@@ -56,9 +56,17 @@
 
 								foreach ($wisata_en as $m){ 
 
-									if($m['url_file_foto']==''){ $cover = 'no_image.jpg'; }else{ $cover = $m['url_file_foto']; }
+									if($m['url_file_foto']==''){
+										$cover = 'no_image.jpg'; 
+									}else{ 
+										$cover = $m['url_file_foto'];
+									}
 
-									$row5 = '<img src="'.base_url().'uploads/foto_wisata/'.$cover.'">';
+									if (file_exists(base_url().'uploads/foto_wisata/'.$cover)) {
+										$row5 = '<img src="'.base_url().'uploads/foto_wisata/'.$cover.'">';
+									} else {
+										$row5 = '<img src="'.base_url().'uploads/foto_wisata/no_image.jpg">';
+									}
 
 									if (strpos($m["wisata_nama"], '-') !== false) {
 										$wisataNama = str_replace('-', '_', $m["wisata_nama"]);
@@ -101,7 +109,11 @@
 
 									if($m['url_file_foto']==''){ $cover = 'no_image.jpg'; }else{ $cover = $m['url_file_foto']; }
 
-									$row5 = '<img src="'.base_url().'uploads/foto_wisata/'.$cover.'" alt ="' . $m['wisata_nama'] . ' ' . $m['nama_kota_kabupaten'] . '">';
+									if (@GetImageSize(base_url().'uploads/foto_wisata/'.$cover)) {
+										$row5 = '<img src="'.base_url().'uploads/foto_wisata/'.$cover.'" alt ="' . $m['wisata_nama'] . ' ' . $m['nama_kota_kabupaten'] . '">';
+									} else {
+										$row5 = '<img src="'.base_url().'uploads/foto_wisata/no_image.jpg" alt ="' . $m['wisata_nama'] . ' ' . $m['nama_kota_kabupaten'] . '">';
+									}
 
 									if (strpos($m["wisata_nama"], '-') !== false) {
 										$wisataNama = str_replace('-', '_', $m["wisata_nama"]);

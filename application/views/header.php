@@ -81,10 +81,56 @@
 <!--[if (gt IE 9)|!(IE)]><!-->
 
 <body>
-	<!--<![endif]-->
+<?php
+// foreach ($iklan_beranda as $i) {
+//     $imgSrc = null;
+//     $url = null;
+//     $iklanPosisi = $i['iklan_posisi'];
+
+//     switch ($iklanPosisi) {
+//         case 'popup':
+//             if ($i['url_foto'] == '') {
+//                 $img = 'no_image.jpg';
+//             } else {
+//                 $img = $i['url_foto'];
+//             }
+
+//             $imgSrc = '<img src="' . base_url() . 'uploads/foto_iklan/' . $img . '">';
+//             $url = $i['iklan_url'];
+
+//             $iklanPopUp = @$iklanPopUp . "
+//                             <a href=" . $url . " class='img-iklan-md' target='_blank' rel='noopener'>
+//                                 " . $imgSrc . "
+//                             </a>
+//                         ";
+
+//             break;
+//         default:
+//     }
+// }
+?>
+<!--<![endif]-->
+<?php if (@$iklanPopUp) { ?>
+	<!-- Modal -->
+	<!-- <div class="modal fade" id="IklanModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" role="dialog" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+					<div class="modal-content">
+							<div class="modal-body">
+									<div class="post">
+											<?php echo @$iklanPopUp ?>
+									</div>
+							</div>
+							<div class="modal-footer">
+									<button type="button" id="btn-close-iklan" class="btn btn-primary disabled" data-bs-dismiss="modal"></button>
+							</div>
+					</div>
+			</div>
+	</div> -->
+<?php } ?>
 	<div id="page-wrap">
 		<!-- <div class="preloader">
 		</div> -->
+
 		<header id="header-page">
 			<div class="header-page__inner">
 				<div class="container">
